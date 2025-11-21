@@ -2,11 +2,11 @@
 
 ## Goal
 
-A tool that converts a pdf into a Powerpoint (pptx)
+Convert PDF documents into PowerPoint presentations with customizable quality settings, professional output format, and comprehensive debugging capabilities.
 
 ## What is pdf-to-pptx-tool?
 
-`pdf-to-pptx-tool` is a command-line utility built with modern Python tooling and best practices.
+`pdf-to-pptx-tool` is a professional command-line utility that converts PDF files to PowerPoint (PPTX) format. Each PDF page becomes a full-slide image in a 16:9 widescreen presentation. Built with modern Python tooling and best practices, it features multi-level verbosity logging, shell completion, and type-safe code.
 
 ## Technical Requirements
 
@@ -19,6 +19,10 @@ A tool that converts a pdf into a Powerpoint (pptx)
 ### Dependencies
 
 - `click` - CLI framework
+- `pdf2image` - PDF to image conversion
+- `python-pptx` - PowerPoint file creation
+- `Pillow` - Image processing
+- `poppler` - System library for PDF rendering (external dependency)
 
 ### Development Dependencies
 
@@ -29,20 +33,83 @@ A tool that converts a pdf into a Powerpoint (pptx)
 - `pip-audit` - Dependency vulnerability scanning
 - `gitleaks` - Secret detection (requires separate installation)
 
-## CLI Arguments
+## CLI Commands
+
+### Main Command
 
 ```bash
-pdf-to-pptx-tool [OPTIONS]
+pdf-to-pptx-tool [OPTIONS] COMMAND [ARGS]
 ```
 
-### Options
-
+**Global Options:**
 - `-v, --verbose` - Enable verbose output (count flag: -v, -vv, -vvv)
   - `-v` (count=1): INFO level logging
   - `-vv` (count=2): DEBUG level logging
-  - `-vvv` (count=3+): TRACE level (includes library internals)
-- `--help` / `-h` - Show help message
+  - `-vvv` (count=3+): TRACE level (includes library internals for pdf2image, PIL, pptx)
 - `--version` - Show version
+- `--help` - Show help message
+
+### convert - Convert PDF to PowerPoint
+
+```bash
+pdf-to-pptx-tool convert INPUT_PDF OUTPUT_PPTX [OPTIONS]
+```
+
+**Arguments:**
+- `INPUT_PDF` - Path to input PDF file (required)
+- `OUTPUT_PPTX` - Path to output PPTX file (required)
+
+**Options:**
+- `--dpi INTEGER` - Resolution for PDF page conversion (default: 200)
+  - Range: 72-600 DPI
+  - Higher DPI = better quality but larger files
+  - Recommended: 200-300 for presentations
+  - Examples: 72 (draft), 150 (web), 200 (default), 300 (print), 600 (high-res)
+
+**Examples:**
+```bash
+# Basic conversion (200 DPI)
+pdf-to-pptx-tool convert document.pdf slides.pptx
+
+# High quality (300 DPI)
+pdf-to-pptx-tool convert report.pdf presentation.pptx --dpi 300
+
+# With verbose logging
+pdf-to-pptx-tool -v convert input.pdf output.pptx
+
+# Batch conversion
+for pdf in *.pdf; do
+  pdf-to-pptx-tool convert "$pdf" "${pdf%.pdf}.pptx"
+done
+```
+
+**Output Format:**
+- Aspect Ratio: 16:9 widescreen
+- Slide Size: 10 inches × 5.625 inches
+- Layout: One full-slide image per PDF page
+- Image Format: PNG embedded in slides
+- Compatibility: PowerPoint 2007+ (Windows/Mac/Online)
+
+### completion - Generate Shell Completion
+
+```bash
+pdf-to-pptx-tool completion SHELL
+```
+
+**Arguments:**
+- `SHELL` - Shell type: `bash`, `zsh`, or `fish` (required)
+
+**Examples:**
+```bash
+# Bash
+eval "$(pdf-to-pptx-tool completion bash)"
+
+# Zsh
+eval "$(pdf-to-pptx-tool completion zsh)"
+
+# Fish
+pdf-to-pptx-tool completion fish | source
+```
 
 ## Project Structure
 
@@ -51,6 +118,7 @@ pdf-to-pptx-tool/
 ├── pdf_to_pptx_tool/
 │   ├── __init__.py
 │   ├── cli.py            # Click CLI entry point (group with subcommands)
+│   ├── converter.py      # PDF to PPTX conversion logic
 │   ├── completion.py     # Shell completion command
 │   ├── logging_config.py # Multi-level verbosity logging
 │   └── utils.py          # Utility functions

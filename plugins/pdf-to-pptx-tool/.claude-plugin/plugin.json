@@ -1,9 +1,8 @@
 {
     "name": "pdf-to-pptx-tool",
-    "description": "A tool that converts a pdf into a Powerpoint (pptx)",
+    "description": "PDF to PowerPoint converter CLI tool",
     "version": "0.1.0",
     "author": {
-        "name": "Dennis Vriend",
-        "email": "dvriend@ilionx.com"
+        "name": "Dennis Vriend"
     }
 }

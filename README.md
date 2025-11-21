@@ -1,13 +1,17 @@
 # pdf-to-pptx-tool
 
-[![Python Version](https://img.shields.io/badge/python-3.14+-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-[![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](https://github.com/python/mypy)
-[![AI Generated](https://img.shields.io/badge/AI-Generated-blueviolet.svg)](https://www.anthropic.com/claude)
-[![Built with Claude Code](https://img.shields.io/badge/Built_with-Claude_Code-5A67D8.svg)](https://www.anthropic.com/claude/code)
+<div align="center">
+  <img src=".github/assets/logo-web.png" alt="pdf-to-pptx-tool logo" width="200"/>
 
-A tool that converts a pdf into a Powerpoint (pptx)
+  [![Python Version](https://img.shields.io/badge/python-3.14+-blue.svg)](https://www.python.org/downloads/)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+  [![Type checked: mypy](https://img.shields.io/badge/type%20checked-mypy-blue.svg)](https://github.com/python/mypy)
+  [![AI Generated](https://img.shields.io/badge/AI-Generated-blueviolet.svg)](https://www.anthropic.com/claude)
+  [![Built with Claude Code](https://img.shields.io/badge/Built_with-Claude_Code-5A67D8.svg)](https://www.anthropic.com/claude/code)
+</div>
+
+A professional CLI tool that converts PDF documents into PowerPoint presentations
 
 ## Table of Contents
 
@@ -15,6 +19,7 @@ A tool that converts a pdf into a Powerpoint (pptx)
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Convert Command](#convert-command)
 - [Multi-Level Verbosity Logging](#multi-level-verbosity-logging)
 - [Shell Completion](#shell-completion)
 - [Development](#development)
@@ -30,13 +35,15 @@ A tool that converts a pdf into a Powerpoint (pptx)
 
 ## Features
 
-- ✅ Type-safe with mypy strict mode
-- ✅ Linted with ruff
-- ✅ Tested with pytest
-- 📊 Multi-level verbosity logging (-v/-vv/-vvv)
-- 🐚 Shell completion for bash, zsh, and fish
-- 🔒 Security scanning with bandit, pip-audit, and gitleaks
-- ✅ Modern Python tooling (uv, mise, click)
+- 📄 **PDF to PowerPoint Conversion**: Convert PDF documents to PPTX format
+- 🎨 **Customizable Quality**: Adjustable DPI (72-600) for quality vs file size
+- 📐 **16:9 Slides**: Professional widescreen format (10" × 5.625")
+- 🖼️  **Full-Page Images**: Each PDF page becomes a full-slide image
+- 📊 **Multi-level Verbosity**: Progressive logging (-v/-vv/-vvv) for debugging
+- 🐚 **Shell Completion**: Native completion for bash, zsh, and fish
+- ✅ **Type-Safe**: Strict mypy checking for reliability
+- 🔒 **Security Scanned**: bandit, pip-audit, and gitleaks
+- ⚡ **Modern Tooling**: Built with Click, uv, and Python 3.14+
 
 ## Installation
 
@@ -44,6 +51,17 @@ A tool that converts a pdf into a Powerpoint (pptx)
 
 - Python 3.14 or higher
 - [uv](https://github.com/astral-sh/uv) package manager
+- **poppler** system library (for PDF rendering)
+  ```bash
+  # macOS
+  brew install poppler
+
+  # Ubuntu/Debian
+  sudo apt-get install poppler-utils
+
+  # Fedora
+  sudo dnf install poppler-utils
+  ```
 
 ### Install from source
 
@@ -74,20 +92,92 @@ pdf-to-pptx-tool --version
 
 ## Usage
 
-### Basic Usage
+### Convert PDF to PowerPoint
 
 ```bash
-# Show help
+# Basic conversion (default 200 DPI)
+pdf-to-pptx-tool convert document.pdf slides.pptx
+
+# High quality conversion (300 DPI)
+pdf-to-pptx-tool convert report.pdf presentation.pptx --dpi 300
+
+# With verbose logging to see progress
+pdf-to-pptx-tool -v convert input.pdf output.pptx
+
+# With debug logging for troubleshooting
+pdf-to-pptx-tool -vv convert problematic.pdf fixed.pptx
+```
+
+### Show Help
+
+```bash
+# General help
 pdf-to-pptx-tool --help
 
-# Run the tool
-pdf-to-pptx-tool
+# Convert command help
+pdf-to-pptx-tool convert --help
 
-# Run with verbose output
-pdf-to-pptx-tool -v      # INFO level
-pdf-to-pptx-tool -vv     # DEBUG level
-pdf-to-pptx-tool -vvv    # TRACE level (includes library internals)
+# Completion command help
+pdf-to-pptx-tool completion --help
+
+# Show version
+pdf-to-pptx-tool --version
 ```
+
+## Convert Command
+
+The `convert` command transforms PDF documents into PowerPoint presentations.
+
+### Syntax
+
+```bash
+pdf-to-pptx-tool convert INPUT_PDF OUTPUT_PPTX [OPTIONS]
+```
+
+### Arguments
+
+- `INPUT_PDF`: Path to the input PDF file (required)
+- `OUTPUT_PPTX`: Path to the output PowerPoint file (required)
+- `--dpi INTEGER`: Resolution for conversion (default: 200)
+  - Range: 72-600 DPI
+  - Higher DPI = better quality but larger files
+  - Recommended: 200-300 for most presentations
+
+### DPI Quality Guidelines
+
+| DPI | Quality | File Size | Best For |
+|-----|---------|-----------|----------|
+| 72 | Low | Smallest | Quick previews, draft slides |
+| 150 | Medium | Small | Web presentations, email |
+| **200** | **Good** | **Medium** | **Default - recommended for most** |
+| 300 | High | Large | Print quality, detailed diagrams |
+| 600 | Very High | Very Large | Professional print, posters |
+
+### Examples
+
+```bash
+# Basic conversion with default 200 DPI
+pdf-to-pptx-tool convert quarterly-report.pdf q4-presentation.pptx
+
+# High quality for detailed diagrams
+pdf-to-pptx-tool convert technical-doc.pdf slides.pptx --dpi 300
+
+# Quick preview with lower quality
+pdf-to-pptx-tool convert draft.pdf preview.pptx --dpi 150
+
+# Batch conversion
+for pdf in *.pdf; do
+  pdf-to-pptx-tool convert "$pdf" "${pdf%.pdf}.pptx"
+done
+```
+
+### Output Format
+
+- **Aspect Ratio**: 16:9 widescreen
+- **Slide Size**: 10 inches × 5.625 inches
+- **Layout**: One full-slide image per PDF page
+- **Image Format**: PNG embedded in slides
+- **Compatibility**: PowerPoint 2007+ (Windows/Mac/Online)
 
 ## Multi-Level Verbosity Logging
 

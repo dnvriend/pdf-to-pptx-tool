@@ -1,87 +1,69 @@
 ---
 name: skill-pdf-to-pptx-tool
-description: A tool that converts a pdf into a Powerpoint (pptx)
+description: Convert PDF to PowerPoint presentations
 ---
 
-<!--
-⚠️ AGENT INSTRUCTIONS: This is a skeleton SKILL.md template
-When details about this CLI tool become clearer, update this file with:
-
-1. **When to use section**: Add 3-5 specific use cases (bullet points)
-2. **Purpose section**: Expand the tool's purpose and capabilities
-3. **When to Use This Skill**: Add specific scenarios and anti-patterns
-4. **Installation**: Keep the standard installation instructions
-5. **Quick Start**: Add 2-3 practical quick start examples
-6. **Core Commands**: Add detailed documentation for each CLI command in collapsible sections
-7. **Advanced Features**: Document advanced features like verbosity, shell completion, pipelines
-8. **Troubleshooting**: Add common issues and solutions
-9. **Best Practices**: Add 3-5 best practices for using the tool
-10. **Resources**: Update with actual GitHub URL and documentation links
-
-CRITICAL REQUIREMENTS:
-- Keep description in frontmatter ≤ 50 characters (hard limit)
-- Use progressive disclosure with <details> tags
-- Include comprehensive examples in each section
-- Provide troubleshooting guidance
-- Keep always-visible content minimal (overview only)
-- Put detailed info in expandable sections
-- Use emojis for section summaries (📖 Core, ⚙️ Advanced, 🔧 Troubleshooting)
--->
-
 # When to use
-<!-- TODO: Add specific use cases when CLI functionality is known -->
-- When you need to use pdf-to-pptx-tool CLI tool
-- When you need comprehensive guidance on CLI commands
-- When you need examples and troubleshooting
+- Converting PDF documents to editable PowerPoint presentations
+- Creating slide decks from PDF reports or documents
+- Need high-quality PDF to PPTX conversion with custom DPI
+- Want multi-level verbosity logging for debugging conversions
 
-# pdf-to-pptx-tool Skill
+# PDF to PowerPoint Converter Skill
 
 ## Purpose
 
-<!-- TODO: Expand with specific tool capabilities -->
-This skill provides access to the `pdf-to-pptx-tool` CLI tool. A tool that converts a pdf into a Powerpoint (pptx).
+This skill provides comprehensive guidance for using `pdf-to-pptx-tool`, a professional CLI tool that converts PDF documents into PowerPoint presentations. Each PDF page becomes a high-quality slide with customizable resolution.
 
 ## When to Use This Skill
 
 **Use this skill when:**
-<!-- TODO: Add specific scenarios, e.g., -->
-- You need to understand how to use pdf-to-pptx-tool
-- You need comprehensive examples and patterns
-- You need troubleshooting guidance
+- You need to convert PDF documents to PowerPoint format
+- You want to customize conversion quality (DPI settings)
+- You need to debug conversion issues with verbose logging
+- You're working with multi-page PDF documents
+- You need programmatic PDF to PPTX conversion in workflows
 
 **Do NOT use this skill for:**
-<!-- TODO: Add anti-patterns, e.g., -->
-- Tasks unrelated to pdf-to-pptx-tool
-- Quick syntax lookups (use slash commands instead)
+- Editing existing PowerPoint files (use PowerPoint directly)
+- Converting other formats (images, Word docs) to PPTX
+- Extracting text from PDFs (use PDF text extraction tools)
+- Creating PowerPoint from scratch (use PowerPoint or python-pptx)
 
 ## CLI Tool: pdf-to-pptx-tool
 
-<!-- TODO: Add tool overview -->
-The `pdf-to-pptx-tool` is a command-line interface tool that A tool that converts a pdf into a Powerpoint (pptx).
+A modern Python CLI tool built with Click, featuring multi-level verbosity logging, shell completion, and type-safe code.
 
 ### Installation
 
 ```bash
-# Clone and install
+# Clone the repository
 git clone https://github.com/dnvriend/pdf-to-pptx-tool.git
 cd pdf-to-pptx-tool
+
+# Install globally with uv
 uv tool install .
 ```
 
 ### Prerequisites
 
 - Python 3.14+
-- [uv](https://github.com/astral-sh/uv) package manager
+- `poppler` system library (for PDF rendering)
+  - macOS: `brew install poppler`
+  - Ubuntu/Debian: `apt-get install poppler-utils`
+  - Windows: Download from poppler releases
 
 ### Quick Start
 
-<!-- TODO: Add 2-3 practical quick start examples when commands are known -->
 ```bash
-# Example 1: Basic usage
-pdf-to-pptx-tool --help
+# Basic conversion
+pdf-to-pptx-tool convert document.pdf slides.pptx
 
-# Example 2: Show version
-pdf-to-pptx-tool --version
+# High quality (300 DPI)
+pdf-to-pptx-tool convert report.pdf presentation.pptx --dpi 300
+
+# With verbose logging
+pdf-to-pptx-tool -v convert input.pdf output.pptx
 ```
 
 ## Progressive Disclosure
@@ -89,127 +71,218 @@ pdf-to-pptx-tool --version
 <details>
 <summary><strong>📖 Core Commands (Click to expand)</strong></summary>
 
-<!-- TODO: Add detailed command documentation for each CLI command -->
-<!-- Template for each command:
+### convert - Convert PDF to PowerPoint
 
-### command-name - Brief Description
-
-Detailed explanation of what this command does.
+Converts a PDF document to PowerPoint format, creating one slide per PDF page with customizable quality settings.
 
 **Usage:**
 ```bash
-pdf-to-pptx-tool command-name ARGUMENT [OPTIONS]
+pdf-to-pptx-tool convert INPUT_PDF OUTPUT_PPTX [OPTIONS]
 ```
 
 **Arguments:**
-- `ARGUMENT`: Description of argument
-- `--option VALUE` / `-o VALUE`: Description of option
-- `-v/-vv/-vvv`: Verbosity (INFO/DEBUG/TRACE)
+- `INPUT_PDF`: Path to input PDF file (required)
+  - Must exist and be a valid PDF file
+  - Supports any PDF version
+  - No size limit (memory permitting)
+- `OUTPUT_PPTX`: Path to output PowerPoint file (required)
+  - Will be created or overwritten
+  - Extension should be `.pptx`
+  - Parent directory must exist
+- `--dpi INTEGER`: Resolution for page conversion (optional)
+  - Default: 200 DPI (good quality, reasonable size)
+  - Range: 72-600 DPI
+  - Higher DPI = better quality but larger files
+  - Recommended: 200-300 for presentations
+- `-v, --verbose`: Multi-level verbosity
+  - No flag: Warnings/errors only
+  - `-v`: INFO level (operations and progress)
+  - `-vv`: DEBUG level (detailed steps)
+  - `-vvv`: TRACE level (library internals)
 
 **Examples:**
 ```bash
-# Example 1: Basic usage
-pdf-to-pptx-tool command-name "example"
+# Example 1: Basic conversion (default 200 DPI)
+pdf-to-pptx-tool convert quarterly-report.pdf q4-presentation.pptx
 
-# Example 2: With options
-pdf-to-pptx-tool command-name "example" --option value
+# Example 2: High quality for detailed diagrams
+pdf-to-pptx-tool convert technical-diagram.pdf slides.pptx --dpi 300
 
-# Example 3: Pipeline usage
-pdf-to-pptx-tool command-name "example" --json | jq '.'
+# Example 3: Lower quality for quick preview
+pdf-to-pptx-tool convert draft.pdf preview.pptx --dpi 150
+
+# Example 4: With INFO logging to see progress
+pdf-to-pptx-tool -v convert large-doc.pdf output.pptx
+
+# Example 5: With DEBUG logging for troubleshooting
+pdf-to-pptx-tool -vv convert problematic.pdf fixed.pptx
+
+# Example 6: Batch conversion with shell loop
+for pdf in *.pdf; do
+  pdf-to-pptx-tool convert "$pdf" "${pdf%.pdf}.pptx"
+done
 ```
 
 **Output:**
-Description of what this command returns.
+- Creates PowerPoint file at specified path
+- Slide properties:
+  - Aspect ratio: 16:9 (widescreen)
+  - Dimensions: 10" × 5.625"
+  - Layout: One full-slide image per PDF page
+  - Background: Transparent
+- Console output:
+  - Success: "✓ Successfully converted input.pdf to output.pptx"
+  - Error: "✗ Error: [detailed error message]"
+- Exit codes:
+  - 0: Success
+  - 1: Error (file not found, invalid input, conversion failed)
 
 ---
 
-Repeat for each command...
--->
+### completion - Generate shell completion scripts
 
-### help - Show Help Information
-
-Display help information for CLI commands.
+Generates shell completion scripts for bash, zsh, or fish shells.
 
 **Usage:**
 ```bash
-pdf-to-pptx-tool --help
-pdf-to-pptx-tool COMMAND --help
+pdf-to-pptx-tool completion SHELL
 ```
+
+**Arguments:**
+- `SHELL`: Shell type (required)
+  - Options: `bash`, `zsh`, `fish`
+  - Case-insensitive
 
 **Examples:**
 ```bash
-# General help
-pdf-to-pptx-tool --help
+# Generate bash completion
+eval "$(pdf-to-pptx-tool completion bash)"
 
-# Command help
-pdf-to-pptx-tool command --help
+# Generate zsh completion
+eval "$(pdf-to-pptx-tool completion zsh)"
 
-# Version info
-pdf-to-pptx-tool --version
+# Generate fish completion
+pdf-to-pptx-tool completion fish | source
+
+# Save to file for permanent installation
+pdf-to-pptx-tool completion bash > ~/.pdf-to-pptx-tool-completion.bash
+echo 'source ~/.pdf-to-pptx-tool-completion.bash' >> ~/.bashrc
 ```
+
+**Output:**
+Shell-specific completion script printed to stdout.
 
 </details>
 
 <details>
 <summary><strong>⚙️  Advanced Features (Click to expand)</strong></summary>
 
-<!-- TODO: Add advanced features documentation -->
-
 ### Multi-Level Verbosity Logging
 
-Control logging detail with progressive verbosity levels. All logs output to stderr.
+The tool supports progressive verbosity levels for debugging and monitoring conversions.
 
 **Logging Levels:**
 
 | Flag | Level | Output | Use Case |
 |------|-------|--------|----------|
-| (none) | WARNING | Errors and warnings only | Production, quiet mode |
-| `-v` | INFO | + High-level operations | Normal debugging |
-| `-vv` | DEBUG | + Detailed info, full tracebacks | Development, troubleshooting |
-| `-vvv` | TRACE | + Library internals | Deep debugging |
+| (none) | WARNING | Errors/warnings only | Production, quiet mode |
+| `-v` | INFO | + Operations, progress | Normal debugging |
+| `-vv` | DEBUG | + Detailed steps, file sizes | Development, troubleshooting |
+| `-vvv` | TRACE | + Library internals (pdf2image, PIL, pptx) | Deep debugging |
 
 **Examples:**
 ```bash
-# INFO level - see operations
-pdf-to-pptx-tool command -v
+# Quiet mode - only see errors
+pdf-to-pptx-tool convert input.pdf output.pptx
 
-# DEBUG level - see detailed info
-pdf-to-pptx-tool command -vv
+# INFO - see conversion progress
+pdf-to-pptx-tool -v convert input.pdf output.pptx
+# Output:
+# [INFO] Starting PDF to PPTX conversion
+# [INFO] Converting input.pdf to output.pptx (DPI: 200)
+# [INFO] Converting PDF pages to images...
+# [INFO] Converted 5 pages
+# [INFO] Creating PowerPoint presentation...
+# [INFO] Saving presentation to output.pptx
 
-# TRACE level - see all internals
-pdf-to-pptx-tool command -vvv
+# DEBUG - see detailed processing
+pdf-to-pptx-tool -vv convert input.pdf output.pptx
+# Additional output:
+# [DEBUG] Input: input.pdf, Output: output.pptx, DPI: 200
+# [DEBUG] Validating input file: input.pdf
+# [DEBUG] Input file size: 2.45 MB
+# [DEBUG] Using DPI setting: 200
+# [DEBUG] Processing slide 1/5
+# [DEBUG] Output file size: 8.23 MB
+
+# TRACE - see library internals
+pdf-to-pptx-tool -vvv convert input.pdf output.pptx
+# Shows pdf2image, PIL, and pptx library debug messages
 ```
 
----
+### DPI Quality Guidelines
+
+Choose DPI based on your use case:
+
+| DPI | Quality | File Size | Best For |
+|-----|---------|-----------|----------|
+| 72 | Low | Smallest | Quick previews, draft slides |
+| 150 | Medium | Small | Web presentations, email |
+| 200 | Good | Medium | **Default - recommended for most** |
+| 300 | High | Large | Print quality, detailed diagrams |
+| 600 | Very High | Very Large | Professional print, posters |
+
+**Trade-offs:**
+- **Higher DPI**: Better quality, larger file size, slower conversion
+- **Lower DPI**: Faster conversion, smaller files, lower quality
+- **Sweet spot**: 200-300 DPI for most presentations
+
+### Batch Processing
+
+Process multiple PDFs efficiently:
+
+```bash
+# Convert all PDFs in directory
+for pdf in *.pdf; do
+  echo "Converting $pdf..."
+  pdf-to-pptx-tool convert "$pdf" "${pdf%.pdf}.pptx"
+done
+
+# With custom DPI
+for pdf in *.pdf; do
+  pdf-to-pptx-tool convert "$pdf" "${pdf%.pdf}.pptx" --dpi 300
+done
+
+# With error handling
+for pdf in *.pdf; do
+  if pdf-to-pptx-tool -v convert "$pdf" "${pdf%.pdf}.pptx"; then
+    echo "✓ Converted $pdf"
+  else
+    echo "✗ Failed to convert $pdf"
+  fi
+done
+```
 
 ### Shell Completion
 
-Native shell completion for bash, zsh, and fish.
+Enable tab completion for faster usage:
 
-**Installation:**
 ```bash
-# Bash (add to ~/.bashrc)
+# Bash - add to ~/.bashrc
 eval "$(pdf-to-pptx-tool completion bash)"
 
-# Zsh (add to ~/.zshrc)
+# Zsh - add to ~/.zshrc
 eval "$(pdf-to-pptx-tool completion zsh)"
 
-# Fish (save to completions)
+# Fish - save to completions directory
+mkdir -p ~/.config/fish/completions
 pdf-to-pptx-tool completion fish > ~/.config/fish/completions/pdf-to-pptx-tool.fish
 ```
 
----
-
-### Pipeline Composition
-
-<!-- TODO: Add pipeline examples when commands support --json and --stdin -->
-Compose commands with Unix pipes for powerful workflows.
-
-**Examples:**
-```bash
-# Example pipeline workflows will be added when CLI commands are implemented
-pdf-to-pptx-tool command --json | jq '.'
-```
+**Benefits:**
+- Tab-complete commands: `pdf-to-pptx-tool <TAB>`
+- Tab-complete options: `pdf-to-pptx-tool convert --<TAB>`
+- Tab-complete file paths automatically
 
 </details>
 
@@ -218,64 +291,223 @@ pdf-to-pptx-tool command --json | jq '.'
 
 ### Common Issues
 
-**Issue: Command not found**
+**Issue: "poppler not found" or PDF conversion fails**
 ```bash
-# Verify installation
-pdf-to-pptx-tool --version
-
-# Reinstall if needed
-cd pdf-to-pptx-tool
-uv tool install . --reinstall
+# Symptom
+RuntimeError: Failed to convert PDF pages: poppler not found
 ```
 
-<!-- TODO: Add command-specific troubleshooting when functionality is known -->
+**Solution:**
+Install poppler system library:
+```bash
+# macOS
+brew install poppler
 
-**Issue: General errors**
-- Try with verbose flag: `-vv` to see detailed error information
-- Check that all prerequisites are installed
-- Ensure you're using Python 3.14+
+# Ubuntu/Debian
+sudo apt-get install poppler-utils
+
+# Fedora
+sudo dnf install poppler-utils
+
+# Verify installation
+pdftoppm -v
+```
+
+---
+
+**Issue: "File not found" error**
+```bash
+# Symptom
+✗ Error: Input PDF file not found: document.pdf
+```
+
+**Solution:**
+- Verify file path is correct
+- Use absolute paths if needed
+- Check file permissions
+```bash
+# Check file exists
+ls -l document.pdf
+
+# Use absolute path
+pdf-to-pptx-tool convert /full/path/to/document.pdf output.pptx
+```
+
+---
+
+**Issue: Output file is too large**
+```bash
+# Symptom
+Generated 50MB PPTX from 2MB PDF
+```
+
+**Solution:**
+Reduce DPI setting:
+```bash
+# Try lower DPI
+pdf-to-pptx-tool convert input.pdf output.pptx --dpi 150
+
+# Or use default 200 DPI
+pdf-to-pptx-tool convert input.pdf output.pptx
+```
+
+---
+
+**Issue: Images look blurry in PowerPoint**
+```bash
+# Symptom
+Text and diagrams appear pixelated
+```
+
+**Solution:**
+Increase DPI setting:
+```bash
+# Use higher quality
+pdf-to-pptx-tool convert input.pdf output.pptx --dpi 300
+
+# For print quality
+pdf-to-pptx-tool convert input.pdf output.pptx --dpi 600
+```
+
+---
+
+**Issue: Conversion is very slow**
+```bash
+# Symptom
+Large PDF takes minutes to convert
+```
+
+**Solution:**
+1. Use DEBUG logging to see progress:
+```bash
+pdf-to-pptx-tool -vv convert large.pdf output.pptx
+```
+
+2. Consider lower DPI for faster conversion:
+```bash
+pdf-to-pptx-tool convert large.pdf output.pptx --dpi 150
+```
+
+3. Split large PDF into chunks and convert separately
+
+---
+
+**Issue: Permission denied writing output file**
+```bash
+# Symptom
+PermissionError: [Errno 13] Permission denied: 'output.pptx'
+```
+
+**Solution:**
+- Check directory write permissions
+- Use different output location
+```bash
+# Write to home directory
+pdf-to-pptx-tool convert input.pdf ~/output.pptx
+
+# Or create directory first
+mkdir -p output-dir
+pdf-to-pptx-tool convert input.pdf output-dir/output.pptx
+```
 
 ### Getting Help
 
 ```bash
-# Show help
+# Tool help
 pdf-to-pptx-tool --help
 
-# Command-specific help
-pdf-to-pptx-tool COMMAND --help
+# Command help
+pdf-to-pptx-tool convert --help
+
+# Completion help
+pdf-to-pptx-tool completion --help
+
+# Version info
+pdf-to-pptx-tool --version
+```
+
+### Debug Workflow
+
+When conversion fails, use this debugging workflow:
+
+```bash
+# 1. Check file exists and is readable
+ls -lh document.pdf
+file document.pdf
+
+# 2. Verify poppler is installed
+pdftoppm -v
+
+# 3. Try with DEBUG logging
+pdf-to-pptx-tool -vv convert document.pdf test.pptx
+
+# 4. Try with lower DPI if memory issues
+pdf-to-pptx-tool -vv convert document.pdf test.pptx --dpi 150
+
+# 5. Check Python and dependencies
+python --version
+pdf-to-pptx-tool --version
 ```
 
 </details>
 
 ## Exit Codes
 
-- `0`: Success
-- `1`: Client error (invalid arguments, validation failed)
-- `2`: Server error (API error, network issue)
-- `3`: Network error (connection failed, timeout)
+- `0`: Success - conversion completed successfully
+- `1`: Error - file not found, invalid input, conversion failed, or permission denied
 
 ## Output Formats
 
-<!-- TODO: Update with actual output formats when commands are implemented -->
+**Default PowerPoint Output:**
+- **Format**: Office Open XML (.pptx)
+- **Aspect Ratio**: 16:9 widescreen
+- **Slide Size**: 10 inches × 5.625 inches
+- **Layout**: One full-slide image per PDF page
+- **Image Format**: PNG embedded in slides
+- **Compatibility**: PowerPoint 2007+ (Windows/Mac/Online)
 
-**Default Output:**
-- Human-readable formatted output
-- Varies by command
+**Console Output:**
+```bash
+# Success
+✓ Successfully converted document.pdf to slides.pptx
 
-**JSON Output (`--json` flag):**
-- Machine-readable structured data
-- Perfect for pipelines and processing
-- Available on commands that support structured output
+# Error
+✗ Error: Input PDF file not found: document.pdf
+```
+
+**Logging Output (with -v/-vv/-vvv):**
+```bash
+[INFO] Starting PDF to PPTX conversion
+[INFO] Converting document.pdf to slides.pptx (DPI: 200)
+[DEBUG] Input file size: 2.45 MB
+[INFO] Converted 10 pages
+[DEBUG] Output file size: 12.78 MB
+[INFO] Conversion completed successfully
+```
 
 ## Best Practices
 
-<!-- TODO: Add command-specific best practices -->
-1. **Use verbosity progressively**: Start with `-v`, increase to `-vv`/`-vvv` only if needed
-2. **Check help first**: Use `--help` to understand command options
-3. **Leverage shell completion**: Install completion for better CLI experience
+1. **Start with default DPI (200)**: Good balance of quality and file size
+2. **Use verbose logging for debugging**: `-vv` shows detailed conversion steps
+3. **Test with sample PDFs first**: Verify quality before batch processing
+4. **Monitor output file sizes**: Adjust DPI if files are too large
+5. **Batch process efficiently**: Use shell loops for multiple files
+6. **Enable shell completion**: Speeds up command-line usage
+7. **Keep poppler updated**: Ensures compatibility with latest PDF features
+8. **Use absolute paths**: Avoids confusion with relative paths
+9. **Verify prerequisites**: Check poppler installation before bulk conversions
+10. **Handle errors gracefully**: Check exit codes in scripts
 
 ## Resources
 
-- **GitHub**: https://github.com/dnvriend/pdf-to-pptx-tool
-- **Python Package Index**: https://pypi.org/project/pdf-to-pptx-tool/
-- **Documentation**: <!-- TODO: Add documentation URL if available -->
+- **GitHub Repository**: https://github.com/dnvriend/pdf-to-pptx-tool
+- **Python Dependencies**:
+  - pdf2image (PDF to image conversion)
+  - python-pptx (PowerPoint file creation)
+  - Pillow (Image processing)
+  - Click (CLI framework)
+- **System Dependencies**: poppler (PDF rendering engine)
+- **Related Tools**:
+  - PyPDF2 (PDF text extraction)
+  - ReportLab (PDF generation)
+  - pandoc (Universal document converter)
