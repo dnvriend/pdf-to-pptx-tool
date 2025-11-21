@@ -1,0 +1,19 @@
+{
+    "name": "pdf-to-pptx-tool",
+    "owner": {
+        "name": "Dennis Vriend",
+        "email": "dvriend@ilionx.com",
+        "url": "https://github.com/dnvriend"
+    },
+    "metadata": {
+        "description": "Marketplace for pdf-to-pptx-tool CLI plugin - A tool that converts a pdf into a Powerpoint (pptx)",
+        "version": "0.1.0"
+    },
+    "plugins": [
+        {
+            "name": "pdf-to-pptx-tool",
+            "source": "./plugins/pdf-to-pptx-tool",
+            "description": "A tool that converts a pdf into a Powerpoint (pptx)"
+        }
+    ]
+}
