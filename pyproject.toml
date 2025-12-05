@@ -1,7 +1,7 @@
 [project]
 name = "pdf-to-pptx-tool"
 version = "0.1.0"
-description = "A tool that converts a pdf into a Powerpoint (pptx)"
+description = "A CLI tool that converts PDF documents into PowerPoint presentations"
 requires-python = ">=3.14"
 dependencies = [
     "click>=8.1.7",
@@ -14,6 +14,37 @@ authors = [
 ]
 license = {text = "MIT"}
 readme = "README.md"
+keywords = [
+    "pdf",
+    "powerpoint",
+    "pptx",
+    "conversion",
+    "cli",
+    "document-conversion",
+    "pdf-to-pptx",
+    "pdf2pptx",
+    "presentation",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Graphics :: Presentation",
+    "Topic :: Office/Business",
+    "Topic :: Utilities",
+    "Environment :: Console",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/dnvriend/pdf-to-pptx-tool"
+Repository = "https://github.com/dnvriend/pdf-to-pptx-tool"
+Issues = "https://github.com/dnvriend/pdf-to-pptx-tool/issues"
+Changelog = "https://github.com/dnvriend/pdf-to-pptx-tool/releases"
 
 [project.scripts]
 pdf-to-pptx-tool = "pdf_to_pptx_tool.cli:main"

@@ -44,10 +44,12 @@ run: ## Run pdf-to-pptx-tool (usage: make run ARGS="...")
 	uv run pdf-to-pptx-tool $(ARGS)
 
 build: ## Build package
-	uv build
+	uv build --force-pep517
 
 install-global: ## Install globally with uv tool
-	uv tool install . --reinstall
+	uv tool uninstall pdf-to-pptx-tool || true
+	uv build --force-pep517
+	uv tool install .
 
 uninstall-global: ## Uninstall global installation
 	uv tool uninstall pdf-to-pptx-tool
